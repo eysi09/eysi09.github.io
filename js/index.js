@@ -1,74 +1,36 @@
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", () => {
 
-  // Full screen first section and position second.
-  var height = $(window).height();
-  $('#search-section').css('height', height);
+  document.getElementById('convert-btn').addEventListener('click', convertTime);
+  
+  function convertTime() {
+    const input = document.getElementById('time-input').value;
+    const op = document.getElementById('operator').value;
+    const val = document.getElementById('value').value;
+    const [h, m, s, ms] = input.split(':');
+    const d = moment
+      .duration(parseInt(h), 'hours')
+      .add(parseInt(m), 'minutes')
+      .add(parseInt(s), 'seconds')
+      .add(parseInt(ms));
+    const totalMs = d.asMilliseconds();
+    const calcedD = moment.duration(calc(totalMs, val, op));
+    const ans = `${calcedD.days()}
+      DAYS ${calcedD.hours()}
+      HOURS ${calcedD.minutes()}
+      MIN ${calcedD.seconds()}
+      SEC ${Math.round(calcedD.milliseconds())}
+      MS`
+    document.getElementById('ans').innerHTML = ans;
+  }
 
-  $('.btn-view-all').click(function() {
-    $('#all-flights-section')[0].scrollIntoView(true);
-  });
-
-  var url = 'http://apis.is/flight';
-
-  var arrivalParams = {
-    'language': 'en',
-    'type':     'arrivals',
-  };
-
-  var departureParams = {
-    'language': 'en',
-    'type':     'departures',
-  };
-
-  var response_data = {};
-
-  $.when(
-
-    $.get(url, departureParams, function(response) {
-      console.log('departures');
-      response_data.departures = _.sortBy(response.results, function(r) {return r.to});
-    }, 'json'),
-
-    $.get(url, arrivalParams, function(response) {
-      console.log('arrivals')
-      response_data.arrivals = _.sortBy(response.results, function(r) {return r.to});
-    }, 'json')
-
-  ).then(function() {
-
-    var buttonView = new ButtonView({
-      el: $('#buttons-wrap')
-    });
-
-    var searchBarView = new SearchBarView({
-      el: $('#search-bar-wrap')
-    });
-
-    var dropdownView = new DropdownView({
-      el: $('#flights-list-wrap'),
-    });
-
-    var responseMessageView = new ResponseMessageView({
-      el: $('#response-msg-wrap')
-    });
-
-    buttonView.searchBarView          = searchBarView;
-    buttonView.dropdownView           = dropdownView;
-    buttonView.responseMessageView    = responseMessageView;
-    searchBarView.buttonView          = buttonView;
-    searchBarView.dropdownView        = dropdownView;
-    searchBarView.responseMessageView = responseMessageView;
-    dropdownView.buttonView           = buttonView;
-    dropdownView.searchBarView        = searchBarView;
-    dropdownView.responseMessageView  = responseMessageView;
-    responseMessageView.buttonView    = buttonView;
-
-    if (_.isEmpty(response_data.departures) || _.isEmpty(response_data.arrivals)) {
-       responseMessageView.mode = 'alert_type_1';
-       responseMessageView.render();
-    } else {
-      searchBarView.load(response_data);
+  function calc(a, b, op) {
+    if (op === '*') {
+      return a*b;
     }
-  });
+    if (op === '/') {
+      return a/b;
+    }
+    return null;
+  }
 
 });
