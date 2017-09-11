@@ -1,7 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('convert-btn').addEventListener('click', convertTime);
-  
+
   function convertTime() {
     const input = document.getElementById('time-input').value;
     const op = document.getElementById('operator').value;
@@ -14,12 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
       .add(parseInt(ms));
     const totalMs = d.asMilliseconds();
     const calcedD = moment.duration(calc(totalMs, val, op));
-    const ans = `${calcedD.days()}
-      DAYS ${calcedD.hours()}
-      HOURS ${calcedD.minutes()}
-      MIN ${calcedD.seconds()}
-      SEC ${Math.round(calcedD.milliseconds())}
-      MS`
+    const ans = calcedD.days() +
+      ' DAYS ' + calcedD.hours() +
+      ' HOURS ' + calcedD.minutes() +
+      ' MIN ' + calcedD.seconds() +
+      ' SEC ' + Math.round(calcedD.milliseconds()) +
+      'MS';
     document.getElementById('ans').innerHTML = ans;
   }
 
