@@ -11,11 +11,13 @@
     <h1>KRONOS</h1>
     <div class="centered">
       <input id="time-input" placeholder="hh:mm:ss:ms">
-        <select id="operator">
-          <option value="*">Multiply</option>
-          <option value="/">Divide</option>
+        <select id="op-select">
+          <option value="mult">Multiply</option>
+          <option value="div">Divide</option>
+          <option value="add">Add</option>
+          <option value="sub">Subtract</option>
         </select>
-      <input id="value" placeholder="E.g. 2.5">
+      <input id="val-input" placeholder="2.5">
       <button id="convert-btn">Convert</button>
     </div>
     <h1 id="ans"></h1>
